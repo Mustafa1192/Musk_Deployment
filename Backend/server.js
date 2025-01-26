@@ -8,10 +8,16 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto'); // To generate OTP
 const bcrypt = require('bcrypt'); // To hash passwords
 
-const app = express();
-const PORT = 5000;
-const MONGODB_URI = 'mongodb+srv://onemenuit:zW2OhyjeFcXgDGu0@cluster0.p6bpt.mongodb.net/OneMenu_App?retryWrites=true&w=majority';
+// Load environment variables
+require('dotenv').config();
+
+// const app = express();
+// const PORT = 5000;
+// const MONGODB_URI = 'mongodb+srv://onemenuit:zW2OhyjeFcXgDGu0@cluster0.p6bpt.mongodb.net/OneMenu_App?retryWrites=true&w=majority';
 // const MONGODB_URI ='mongodb+srv://mustafakhan31499:cNG8NPtbhNaY5ieh@cluster1.cye9d.mongodb.net/Canteen_app?retryWrites=true&w=majority&appName=Cluster1';
+const app = express();
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -44,13 +50,20 @@ const tempUserSchema = new mongoose.Schema({
 
 const TempUser = mongoose.model('TempUser', tempUserSchema);
 
-// Nodemailer configuration
+// // Nodemailer configuration
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'onemenu.it@gmail.com',
+//     pass: 'euwo vymq gdxb jsmf'
+//   }
+// });
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'onemenu.it@gmail.com',
-    pass: 'euwo vymq gdxb jsmf'
-  }
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
 // Route to handle OTP generation (Step 1)
